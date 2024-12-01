@@ -1,0 +1,162 @@
+<html>
+<head>
+    <!-- just usingjquery for the $(document).ready() - we don't need it for charting  -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>     
+    <!-- need the raphael vector library -->
+    <script type="text/javascript" src="raphael-min.js"></script>
+    <!-- our treemapping library-->
+    <script type="text/javascript" src="../min/treemap-squared-0.5.min.js"></script>   
+   
+</head>
+<style>
+    body {
+      font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      color: rgb(10, 10, 10);
+    }
+    
+    .cut {
+      width: 50%;
+      height: 100%;
+
+      z-index: 1;
+      position: fixed;
+      overflow-x: hidden;
+      top: 0;
+      padding-top: 15px;
+    }
+    
+    .left {
+      left: 0;
+      background-color: #c9c9c9;
+    }
+    
+    .right {
+      right : 0;
+      background-color: rgb(255, 255, 255);
+    }
+    
+    .centered {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+      text-align: center;
+      text-indent: 0px;
+      
+    }
+    .paper {
+      position: absolute;
+      top: 50%;
+      text-indent: 50px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgb(255, 255, 255);
+      height: 857px;
+      width: 640px;
+      box-shadow: 10px 10px 5px gray;
+    }
+    table {
+    border-collapse: collapse;
+    border: 2px solid rgb(179, 179, 179);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    letter-spacing: 1px;
+    }
+
+    caption {
+      caption-side: bottom;
+      padding: 10px;
+      font-weight: bold;
+    }
+
+    thead,
+    tfoot {
+      background-color: rgb(228 240 245);
+    }
+
+    th,
+    td {
+      border: 1px solid rgb(160 160 160);
+      padding: 8px 12px;
+    }
+
+    td:last-of-type {
+      text-align: center;
+    }
+
+    tbody > tr:nth-of-type(even) {
+      background-color: rgb(237 238 242);
+    }
+
+    tfoot th {
+      text-align: right;
+    }
+
+    tfoot td {
+      font-weight: bold;
+    }
+</style>
+<body>
+
+<div class="cut left">
+    <div class="paper">
+        <h2>EXAMPLE WEBPAGE</h2>
+        <div class="centered">
+            <div id="left-grid"></div>
+        </div>
+    </div>
+</div>
+<div class="cut right">
+  <div class="centered">
+    <h1>DP TABLE</h1>
+    <table>
+      <caption>
+        Front-end web developer course 2021
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">advert</th>
+          <th scope="col">0</th>
+          <th scope="col">1</th>
+          <th scope="col">2</th>
+          <th scope="col">3</th>
+          <th scope="col">4</th>
+          <th scope="col">5</th>
+        </tr>
+      </thead>
+      <tbody id="DPTABLE">
+      </tbody>
+    </table>
+    
+    <!-- <div class="grid-container">
+      <div class="grid-item">ad</div>
+      <div class="grid-item">c/s</div>
+      <div class="grid-item">c/s</div>
+      <div class="grid-item">c/s</div>
+      <div class="grid-item">a</div>
+      <div class="grid-item">...</div>
+      <div class="grid-item">...</div>
+      <div class="grid-item">...</div>
+      <div class="grid-item">b</div>
+      <div class="grid-item">...</div>
+      <div class="grid-item">...</div>
+      <div class="grid-item">...</div>
+      <div class="grid-item">c</div>
+      <div class="grid-item">...</div>
+      <div class="grid-item">...</div>
+      <div class="grid-item">...</div>
+    </div> -->
+  </div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        
+      document.getElementById("DPTABLE").innerHTML =         "<tr><th scope=" + "row" + ">a</th><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>"
+        var data = [[400], [250], [150],[50]];
+        var labels = ["a", "b", "c"];
+        Treemap.draw("left-grid", 600, 450, data, labels);
+
+    });
+</script>
+</body>
+</html>
