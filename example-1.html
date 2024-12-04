@@ -1,11 +1,13 @@
 <html>
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/potpack@2.0.0/index.min.js"></script>
     <!-- just usingjquery for the $(document).ready() - we don't need it for charting  -->
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>     
     <!-- need the raphael vector library -->
     <script type="text/javascript" src="raphael-min.js"></script>
     <!-- our treemapping library-->
-    <script type="text/javascript" src="../min/treemap-squared-0.5.min.js"></script>   
+    <script type="text/javascript" src="../min/treemap-squared-0.5.min.js"></script>  
+    <script type="text/javascript" src="../min/treemap-squared-0.5.min.js"></script> 
    
 </head>
 <style>
@@ -101,7 +103,7 @@
     <div class="paper">
         <h2>EXAMPLE WEBPAGE</h2>
         <div class="centered">
-            <div id="left-grid"></div>
+            <div id="left-grid"><canvas id="myCanvas" width="500" height="400"></canvas></div>
         </div>
     </div>
 </div>
@@ -147,16 +149,65 @@
     </div> -->
   </div>
 </div>
-<script type="text/javascript">
+<script type="module">
+    import potpack from 'https://cdn.skypack.dev/potpack';
 
-    $(document).ready(function () {
+
+    let resultData = null; // Initialize a variable to store the result
+
+    fetch("http://127.0.0.1:5000/calculate")
+    .then(responce => responce.json())
+    .then(data => console.log(data))
+    .catch(error => console.log(error))
+ 
+
+
+    const canvas = document.getElementById('myCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.strokeStyle = 'black';
+  ctx.lineWidth = 1.5;
+  
+  const adverts = [
+    { w: 110, h: 110},
+    { w: 130, h: 130 },
+    { w: 130, h: 30 },
+    { w: 120, h: 160 },
+    { w: 140, h: 140 }
+  ];
+
+  const packedAds = potpack(adverts);
+  canvas.width = packedAds.w;
+  canvas.height = packedAds.h;
+
+  for (const ad of adverts) {
+    ctx.fillStyle = getRandomColor(); // Set random fill color for each box
+    ctx.fillRect(ad.x, ad.y, ad.w, ad.h);
+    ctx.strokeRect(ad.x, ad.y, ad.w, ad.h);
+  }
+
+  // Function to generate random colors NOTE: FOUND ONLINE TEMPORARY FUNCTION WE SHOULD JUST DEFINE OUR OWN COLORS
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+
+    //THIS IS OLD CODE FOR ORIGINAL IMPLEMENTATION, CAN STILL BE USED TO SHOW WHICH ADS MAKE US THE MOST MONEY BUT THATS ALL
+    // $(document).ready(function () {
         
-      document.getElementById("DPTABLE").innerHTML =         "<tr><th scope=" + "row" + ">a</th><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>"
-        var data = [[400], [250], [150],[50]];
-        var labels = ["a", "b", "c"];
-        Treemap.draw("left-grid", 600, 450, data, labels);
+    //   document.getElementById("DPTABLE").innerHTML =         "<tr><th scope=" + "row" + ">a</th><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>"
+    //     var data = [[4000], [250], [150]];
+    //     var labels = ["a", "b", "c"];
+    //     Treemap.draw("left-grid", 600, 450, data, labels);
 
-    });
+    // });
 </script>
 </body>
 </html>
