@@ -109,64 +109,34 @@
 </div>
 <div class="cut right">
   <div class="centered">
-    <h1>DP TABLE</h1>
+    <h1>Filtered Ad Stats</h1>
     <table>
       <caption>
-        Front-end web developer course 2021
+        Profit Breakdown
       </caption>
       <thead>
         <tr>
           <th scope="col">advert</th>
-          <th scope="col">0</th>
-          <th scope="col">1</th>
-          <th scope="col">2</th>
-          <th scope="col">3</th>
-          <th scope="col">4</th>
-          <th scope="col">5</th>
+          <th scope="col">Profit</th>
         </tr>
       </thead>
       <tbody id="DPTABLE">
       </tbody>
     </table>
-    
-    <!-- <div class="grid-container">
-      <div class="grid-item">ad</div>
-      <div class="grid-item">c/s</div>
-      <div class="grid-item">c/s</div>
-      <div class="grid-item">c/s</div>
-      <div class="grid-item">a</div>
-      <div class="grid-item">...</div>
-      <div class="grid-item">...</div>
-      <div class="grid-item">...</div>
-      <div class="grid-item">b</div>
-      <div class="grid-item">...</div>
-      <div class="grid-item">...</div>
-      <div class="grid-item">...</div>
-      <div class="grid-item">c</div>
-      <div class="grid-item">...</div>
-      <div class="grid-item">...</div>
-      <div class="grid-item">...</div>
-    </div> -->
   </div>
 </div>
 <script type="module">
     import potpack from 'https://cdn.skypack.dev/potpack';
 
-        
-
-
-
-
-
-    let obj;
-
+      
+    //async function
     fetch("http://127.0.0.1:5000/calculate")
     .then(responce => responce.json())
     .then(data => {
 
         let resultData = data;  
 
-
+        const tableBody = document.getElementById("DPTABLE");
         console.log(resultData);
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
@@ -178,22 +148,22 @@
 
         const selectedAds = resultData["Selected Ads"];
 
-        // Extract dimensions and values for potpack
+        selectedAds.forEach(ad => {
+          const row = tableBody.insertRow();
+          const adId = row.insertCell();
+          const adProfit = row.insertCell();
+
+          adId.textContent = ad.ad_id; 
+          adProfit.textContent = ad.value;
+        });
+
+
         const adverts = selectedAds.map(ad => ({
-          w: ad.width * 75,
-          h: ad.height * 75, 
-          //value: ad.value // Optional: If you need the value for potpack
+          w: ad.width * 75, //pixels
+          h: ad.height * 75, //pixels
         }));
 
         console.log(adverts)
-
-        // const adverts = [
-        //   { w: 110, h: 110},
-        //   { w: 130, h: 130 },
-        //   { w: 130, h: 30 },
-        //   { w: 120, h: 160 },
-        //   { w: 140, h: 140 }
-        // ];
 
         const packedAds = potpack(adverts);
         canvas.width = packedAds.w;
@@ -205,14 +175,19 @@
           ctx.strokeRect(ad.x, ad.y, ad.w, ad.h);
         }
 
-        // Function to generate random colors NOTE: FOUND ONLINE TEMPORARY FUNCTION WE SHOULD JUST DEFINE OUR OWN COLORS
+        
         function getRandomColor() {
-          const letters = '0123456789ABCDEF';
-          let color = '#';
-          for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-          }
-          return color;
+          let colors = [
+            "IndianRed",
+            "LightCoral",
+            "DarkSalmon",
+            "LightSalmon",
+            "Crimson",
+            "FireBrick",
+            "DarkRed"
+          ] 
+
+          return colors[Math.floor(Math.random() * colors.length)]
         }
 
 
@@ -225,16 +200,6 @@
     })
     .catch(error => console.log(error))
 
-
-    //THIS IS OLD CODE FOR ORIGINAL IMPLEMENTATION, CAN STILL BE USED TO SHOW WHICH ADS MAKE US THE MOST MONEY BUT THATS ALL
-    // $(document).ready(function () {
-        
-    //   document.getElementById("DPTABLE").innerHTML =         "<tr><th scope=" + "row" + ">a</th><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>"
-    //     var data = [[4000], [250], [150]];
-    //     var labels = ["a", "b", "c"];
-    //     Treemap.draw("left-grid", 600, 450, data, labels);
-
-    // });
 </script>
 </body>
 </html>
