@@ -1,0 +1,25 @@
+ # represents the maximum profit achievable when considering the first i ads with a remaining space S
+dp[i][S] = 0  
+
+# The list of ads selected to achieve the maximum profit dp[i][S].
+selected_ads[i][S] = []
+Initialize the remaining space as a single rectangle [(max_length, max_width)]
+
+for i = 1 to len(ads):
+    ad_id, ad_height, ad_width, ad_value = ads[i-1]
+    
+    for each prev_space in dp[i-1]:
+        # Option 1: Do not Choose Ad i
+        dp[i][prev_space] = max(dp[i][prev_space], dp[i-1][prev_space])
+        if dp[i][prev_space] == dp[i-1][prev_space]:
+            selected_ads[i][prev_space] = selected_ads[i-1][prev_space]
+
+        # Option 2: Choose Ad i
+        for each (rect in prev_space):
+            if ad_height <= rect.height and ad_width <= rect.width:
+                current_space = split_space(prev_space, ad_height, ad_width)
+                new_value = dp[i-1][prev_space] + ad_value
+                
+                if new_value > dp[i][current_space]:
+                    dp[i][current_space] = new_value
+                    selected_ads[i][current_space] = selected_ads[i-1][prev_space] + [ad_id]
